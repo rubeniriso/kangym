@@ -1,6 +1,9 @@
 import { useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../context/auth.context.js"
+
 export default function Login() {
-  //const { authenticateUser } = useContext(AuthContext);
+  const { authenticateUser } = useContext(AuthContext);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -8,7 +11,7 @@ export default function Login() {
 
   const handleEmailChange = (e) => setEmail(e.target.value);
   const handlePasswordChange = (e) => setPassword(e.target.value);
-  //const navigate = useNavigate();
+  const navigate = useNavigate();
   const handleLogin = async (e) => {
     e.preventDefault();
 
@@ -18,10 +21,10 @@ export default function Login() {
     };
 
     try {
-      //const response = await loginService(user);
-      //localStorage.setItem("authToken", response.data.authToken)
-      //await authenticateUser();
-      //navigate("/");
+      const response = await loginService(user);
+      localStorage.setItem("authToken", response.data.authToken)
+      await authenticateUser();
+      navigate("/");
     } catch (error) {
       const { errorMessage } = error.response.data;
       setError(errorMessage);

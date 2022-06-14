@@ -1,27 +1,31 @@
 import { useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import { signupService } from "../services/auth.services";
 export default function Signup() {
-  //const { authenticateUser } = useContext(AuthContext);
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-
+  const [username, setUsername] = useState("");
+  const [repeatPassword, setRepeatPassword] = useState("");
+  
+  const handleUsernameChange = (e) => setUsername(e.target.value);
   const handleEmailChange = (e) => setEmail(e.target.value);
   const handlePasswordChange = (e) => setPassword(e.target.value);
-  //const navigate = useNavigate();
-  const handleLogin = async (e) => {
-    e.preventDefault();
+  const handleRepeatPasswordChange = (e) => setRepeatPassword(e.target.value);
+  const navigate = useNavigate();
 
+  const handleSignup = async (e) => {
+    e.preventDefault();
     const user = {
       email,
       password,
+      username,
+      repeatPassword,
     };
 
     try {
-      //const response = await loginService(user);
-      //localStorage.setItem("authToken", response.data.authToken)
-      //await authenticateUser();
-      //navigate("/");
+      const response = await signupService(user);
+      navigate("/login");
     } catch (error) {
       const { errorMessage } = error.response.data;
       setError(errorMessage);
@@ -58,7 +62,7 @@ export default function Signup() {
                     <div className="px-4 py-2 -mx-3">
                       <div className="mx-3 text-left">
                         <span className="font-semibold text-red-500 text-red-400">
-                          Error
+                          Error: {error}
                         </span>
                         <p className="text-sm bg-white text-gray-200">
                           {error}
@@ -69,8 +73,25 @@ export default function Signup() {
                 )}
               </div>
               <div className="mt-8">
-                <form onSubmit={handleLogin}>
+                <form onSubmit={handleSignup}>
                   <div className="flex flex-col justify-between items-start mb-2">
+                    <label
+                      htmlFor="username"
+                      className="text-left block text-sm text-independence-200"
+                    >
+                      Username
+                    </label>
+                    <input
+                      type="text"
+                      value={username}
+                      onChange={handleUsernameChange}
+                      name="username"
+                      id="username"
+                      placeholder="Username"
+                      className="block w-full px-4 py-2 mt-2 border border-independence-100 rounded-md placeholder-independence-0 bg-white text-independence-300 border-gray-700 focus:border-blue-400 focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40"
+                    />
+                  </div>
+                  <div className="mt-6 flex flex-col justify-between items-start mb-2">
                     <label
                       htmlFor="email"
                       className="text-left block text-sm text-independence-200"
@@ -120,8 +141,8 @@ export default function Signup() {
                     <input
                       type="password"
                       name="repeatPassword"
-                      value={password}
-                      onChange={handlePasswordChange}
+                      value={repeatPassword}
+                      onChange={handleRepeatPasswordChange}
                       id="repeatPassword"
                       placeholder="Your Password"
                       className="block w-full px-4 py-2 mt-2 border border-gray-200 rounded-md placeholder-independence-0 bg-white text-independence-200 border-gray-700 focus:border-blue-400 focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40"
@@ -129,7 +150,7 @@ export default function Signup() {
                   </div>
 
                   <div className="mt-6">
-                  <button className="w-full px-4 py-2 tracking-wide text-white transition-colors duration-200 transform bg-wine-100 rounded-md hover:bg-wine-100 focus:outline-none focus:bg-wine-    0 focus:ring focus:ring-wine-0 focus:ring-opacity-50">
+                    <button className="w-full px-4 py-2 tracking-wide text-white transition-colors duration-200 transform bg-wine-100 rounded-md hover:bg-wine-100 focus:outline-none focus:bg-wine-    0 focus:ring focus:ring-wine-0 focus:ring-opacity-50">
                       Sign up
                     </button>
                   </div>
