@@ -96,5 +96,9 @@ router.post("/login", async (req, res, next) => {
     }
 })
 
+router.get("/verify", isAuthenticated, (req, res, next) => {
+    // Verify the token each request
+    res.json(req.payload)
+})
 
 module.exports = router;
