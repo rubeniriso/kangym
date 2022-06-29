@@ -9,4 +9,11 @@ router.get("/", (req, res, next) => {
 const authRoutes = require('./auth.routes')
 router.use("/auth", authRoutes)
 
+const userRoutes = require('./user.routes')
+router.use("/user", userRoutes)
+
+const kanjiRoutes = require('./kanji.routes')
+router.use("/kanji", kanjiRoutes)
+
+
 module.exports = router;

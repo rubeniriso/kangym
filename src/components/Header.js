@@ -2,7 +2,12 @@ import { useNavigate } from "react-router-dom";
 
 export default function Header() {
   const navigate = useNavigate();
-
+  const handleKanjiClick = () => {
+    navigate("/study/kanji");
+  };
+  const handleMainMenuClick = () => {
+    navigate("/");
+  };
   return (
     <nav className="fixed w-screen bg-wine-100 shadow dark:bg-gray-800">
       <div className="container px-6 py-4 mx-auto">
@@ -12,6 +17,7 @@ export default function Header() {
               <a
                 className="text-2xl font-bold text-white transition-colors duration-200 transform dark:text-white lg:text-3xl hover:text-gray-700 dark:hover:text-gray-300"
                 href="#"
+                onClick={handleMainMenuClick}
               >
                 Brand
               </a>
@@ -39,6 +45,7 @@ export default function Header() {
             <div className="flex flex-col -mx-4 md:flex-row md:items-center md:mx-8">
               <button
                 href="#"
+                onClick={handleKanjiClick}
                 className="px-2 py-1 mx-2 mt-2 text-sm font-medium text-white transition-colors duration-200 transform rounded-md md:mt-0 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-700"
               >
                 Kanji
@@ -65,7 +72,6 @@ export default function Header() {
 
             <div className="flex items-center mt-4 md:mt-0">
               <button
-                onClick={navigate("/study/kanji")}
                 className="hidden mx-4 text-white transition-colors duration-200 transform md:block dark:text-gray-200 hover:text-gray-700 dark:hover:text-gray-400 focus:text-gray-700 dark:focus:text-gray-400 focus:outline-none"
                 aria-label="show notifications"
               >

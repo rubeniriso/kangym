@@ -2,6 +2,8 @@ import KanjiCard from "../components/KanjiCard";
 import KanjiFlipButton from "../components/KanjiFlipButton";
 import KanjiResponseButton from "../components/KanjiResponseButton";
 import { AuthContext } from "../context/auth.context";
+import { kanjiService } from "../services/kanji.services";
+
 import React from "react";
 import ReactDOM from "react-dom";
 import { useState, useEffect, useContext } from "react";
@@ -46,6 +48,7 @@ export default function Kanji() {
   ]);
   useEffect(() => {
     authenticateUser();
+    
   }, [location]);
   return (
     <>
