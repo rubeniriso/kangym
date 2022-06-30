@@ -3,7 +3,7 @@ import KanjiFlipButton from "../components/KanjiFlipButton";
 import KanjiResponseButton from "../components/KanjiResponseButton";
 import { AuthContext } from "../context/auth.context";
 import { getKanjiService } from "../services/kanji.services";
-
+import uuid from 'react-uuid'
 import React from "react";
 import ReactDOM from "react-dom";
 import { useState, useEffect, useContext } from "react";
@@ -23,7 +23,6 @@ export default function Kanji() {
   const [singleButton, setSingleButton] = useState(
     <KanjiFlipButton
       setButtonWasClicked={setButtonWasClicked}
-      setMeaning={setMeaning}
       kanjiList = {kanjiList}
       setStory={setStory}
       buttonWasClicked={buttonWasClicked}
@@ -32,7 +31,6 @@ export default function Kanji() {
   );
   const [buttonArray, setButtonArray] = useState([
     <KanjiResponseButton
-      key={"2"}
       setCharacter={setCharacter}
       setButtonWasClicked={setButtonWasClicked}
       buttonWasClicked={buttonWasClicked}
@@ -42,7 +40,6 @@ export default function Kanji() {
       setKanjiList = {setKanjiList}
     />,
     <KanjiResponseButton
-      key={"3"}
       setCharacter={setCharacter}
       setButtonWasClicked={setButtonWasClicked}
       buttonWasClicked={buttonWasClicked}
@@ -54,13 +51,13 @@ export default function Kanji() {
   ]);
   useEffect(() => {
     getKanjisFromAPI();
-  }, [location]);
-
+  }, []);
   const getKanjisFromAPI = async () => {
     try {
       const response = await getKanjiService(user.id);
       setKanjiList(response.data);      
       setCharacter(response.data[0]['kanji']);
+      setMeaning(response.data[0]['meaning']);
     } catch (error) {
       console.log(error);
     }
@@ -79,7 +76,7 @@ export default function Kanji() {
         />
         <div className="flex flex-row" id="button-div">
           {buttonWasClicked
-            ? buttonArray.map((e) => <div>{e}</div>)
+            ? buttonArray.map((e) => <div key={uuid()}>{e}</div>)
             : singleButton}
         </div>
       </div>

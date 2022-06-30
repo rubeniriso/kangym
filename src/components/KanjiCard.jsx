@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import FlipCharacterStoryButton from './FlipCharacterStoryButton';
 export default function KanjiCard(props) {
+  const {meaning, buttonWasClicked} = props
   useEffect(() => {
     props.setCardTurn(!props.cardTurn);
   }, []);
@@ -29,7 +30,7 @@ export default function KanjiCard(props) {
         </svg>
 
         <h1 className="mx-3 text-lg font-semibold text-white" id="kanji-meaning">
-          {props.buttonWasClicked ? props.meaning : ""}
+          {buttonWasClicked ? meaning : ""}
         </h1>
       </div>
     </div>

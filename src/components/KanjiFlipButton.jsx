@@ -5,7 +5,6 @@ import { useState, useEffect } from "react";
 export default function KanjiFlipButton(props) {
   const handleClick = () => {
     props.setButtonWasClicked(true);
-    props.setMeaning(props.kanjiList);
     props.setStory("Story");
     props.setCardTurn(true);
   }
