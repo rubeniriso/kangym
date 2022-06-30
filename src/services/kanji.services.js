@@ -1,5 +1,7 @@
 import service from "./config.services";
 
-const kanjiService = (userId) => {
+const getKanjiService = (userId) => {
   return service.get(`/kanji/${userId}`);
 };
+
+export { getKanjiService }

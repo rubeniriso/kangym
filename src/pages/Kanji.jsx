@@ -2,7 +2,7 @@ import KanjiCard from "../components/KanjiCard";
 import KanjiFlipButton from "../components/KanjiFlipButton";
 import KanjiResponseButton from "../components/KanjiResponseButton";
 import { AuthContext } from "../context/auth.context";
-import { kanjiService } from "../services/kanji.services";
+import { getKanjiService } from "../services/kanji.services";
 
 import React from "react";
 import ReactDOM from "react-dom";
@@ -12,17 +12,19 @@ import { useLocation } from "react-router-dom";
 export default function Kanji() {
   const [meaning, setMeaning] = useState();
   const [story, setStory] = useState();
-  const [character, setCharacter] = useState("天");
   const [buttonWasClicked, setButtonWasClicked] = useState(false);
   const [showButton, setShowButton] = useState(false);
   const [cardTurn, setCardTurn] = useState(true);
-  const { authenticateUser } = useContext(AuthContext);
-  const location = useLocation();
+  const { user } = useContext(AuthContext);
+  const [character, setCharacter] = useState("");
+  const [kanjiList, setKanjiList] = useState([]);
 
+  const location = useLocation();
   const [singleButton, setSingleButton] = useState(
     <KanjiFlipButton
       setButtonWasClicked={setButtonWasClicked}
       setMeaning={setMeaning}
+      kanjiList = {kanjiList}
       setStory={setStory}
       buttonWasClicked={buttonWasClicked}
       setCardTurn={setCardTurn}
@@ -30,26 +32,39 @@ export default function Kanji() {
   );
   const [buttonArray, setButtonArray] = useState([
     <KanjiResponseButton
-      key={"0"}
+      key={"2"}
       setCharacter={setCharacter}
       setButtonWasClicked={setButtonWasClicked}
       buttonWasClicked={buttonWasClicked}
       buttonText={"Hit"}
       setCardTurn={setCardTurn}
+      kanjiList = {kanjiList}
+      setKanjiList = {setKanjiList}
     />,
     <KanjiResponseButton
-      key={"1"}
+      key={"3"}
       setCharacter={setCharacter}
       setButtonWasClicked={setButtonWasClicked}
       buttonWasClicked={buttonWasClicked}
       buttonText={"Miss"}
       setCardTurn={setCardTurn}
+      kanjiList = {kanjiList}
+      setKanjiList = {setKanjiList}
     />,
   ]);
   useEffect(() => {
-    authenticateUser();
-    
+    getKanjisFromAPI();
   }, [location]);
+
+  const getKanjisFromAPI = async () => {
+    try {
+      const response = await getKanjiService(user.id);
+      setKanjiList(response.data);      
+      setCharacter(response.data[0]['kanji']);
+    } catch (error) {
+      console.log(error);
+    }
+  }
   return (
     <>
       <div className="bg-cream-100 h-full flex place-items-center place-content-center flex-wrap flex-col gap-[150px]">

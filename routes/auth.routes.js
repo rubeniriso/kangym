@@ -77,6 +77,7 @@ router.post("/signup", async (req, res, next) => {
         user: userId,
         kanji: kanjiId,
         scheduledReview: todayDate,
+        new: true,
       });
     });
     res.status(200).json("OK, user created");

@@ -4,8 +4,11 @@ import { useState, useEffect, useRef } from "react";
 
 export default function KanjiResponseButton(props) {
   function handleHit() {
+    //array.push(array.splice(index, 1)[0]);
+    console.log(props.kanjiList);
     props.setButtonWasClicked(false);
     props.setCardTurn(false);
+    props.setKanjiList(props.kanjiList.shift());
   }
   function handleMiss() {
     props.setButtonWasClicked(false);

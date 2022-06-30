@@ -10,6 +10,7 @@ const userKanjiSchema = new Schema({
         ref: 'Kanji',
     }],
     scheduledReview: Date,
+    new: Boolean,
 })    
 const UserKanji = model("UserKanji", userKanjiSchema);
 module.exports = UserKanji;

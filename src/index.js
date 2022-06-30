@@ -5,19 +5,17 @@ import App from "./App";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import reportWebVitals from "./reportWebVitals";
-import { AuthWrapper } from './context/auth.context';
+import { AuthWrapper } from "./context/auth.context";
 
 import { BrowserRouter } from "react-router-dom";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <React.StrictMode>
-    <AuthWrapper>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    </AuthWrapper>
-  </React.StrictMode>
+  <AuthWrapper>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  </AuthWrapper>
 );
 
 // If you want to start measuring performance in your app, pass a function

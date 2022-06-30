@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 
 export default function KanjiMissButton(props) {
   function handleMiss() {
-    console.log("miss");
     props.setButtonWasClicked(false);
     //props.setMeaning('');
   }
