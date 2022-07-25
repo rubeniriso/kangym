@@ -4,4 +4,9 @@ const getKanjiService = (userId) => {
   return service.get(`/kanji/${userId}`);
 };
 
-export { getKanjiService }
+const changeKanjiDateService = (kanji) => {
+    return service.put(`/kanji/dateupdate/${kanji}`);
+  };
+  
+
+export { getKanjiService, changeKanjiDateService }

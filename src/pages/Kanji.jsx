@@ -1,9 +1,8 @@
 import KanjiCard from "../components/KanjiCard";
 import KanjiFlipButton from "../components/KanjiFlipButton";
-import KanjiResponseButton from "../components/KanjiResponseButton";
 import { AuthContext } from "../context/auth.context";
-import { getKanjiService } from "../services/kanji.services";
-import uuid from 'react-uuid'
+import { getKanjiService, changeKanjiDateService } from "../services/kanji.services";
+import uuid from "react-uuid";
 import React from "react";
 import ReactDOM from "react-dom";
 import { useState, useEffect, useContext } from "react";
@@ -20,44 +19,79 @@ export default function Kanji() {
   const [kanjiList, setKanjiList] = useState([]);
 
   const location = useLocation();
-  const [singleButton, setSingleButton] = useState(
-    <KanjiFlipButton
-      setButtonWasClicked={setButtonWasClicked}
-      kanjiList = {kanjiList}
-      setStory={setStory}
-      buttonWasClicked={buttonWasClicked}
-      setCardTurn={setCardTurn}
-    />
-  );
-  const [buttonArray, setButtonArray] = useState([
-    <KanjiResponseButton
-      setCharacter={setCharacter}
-      setButtonWasClicked={setButtonWasClicked}
-      buttonWasClicked={buttonWasClicked}
-      buttonText={"Hit"}
-      setCardTurn={setCardTurn}
-      kanjiList = {kanjiList}
-      setKanjiList = {setKanjiList}
-    />,
-    <KanjiResponseButton
-      setCharacter={setCharacter}
-      setButtonWasClicked={setButtonWasClicked}
-      buttonWasClicked={buttonWasClicked}
-      buttonText={"Miss"}
-      setCardTurn={setCardTurn}
-      kanjiList = {kanjiList}
-      setKanjiList = {setKanjiList}
-    />,
-  ]);
+
   useEffect(() => {
     getKanjisFromAPI();
   }, []);
+
+  /*function handleHit() {
+    setButtonWasClicked(false);
+    setCardTurn(false);
+    changeKanjiDate();
+    setKanjiList(kanjiList.shift());
+    console.log(kanjiList);
+  }
+*/
+  const handleHit = async () => {
+    setButtonWasClicked(false);
+    setCardTurn(false);
+    //changeKanjiDate();
+    if (kanjiList.length === 1){
+      //FINISHED
+    } else{
+      let auxKanjiList = kanjiList.shift();
+    }
+    setCharacter(kanjiList[0]["kanji"]);
+    setMeaning(kanjiList[0]["meaning"]);
+  }
+
+  function handleMiss() {
+    setButtonWasClicked(false);
+    setCardTurn(false);
+    //changeKanjiDate();
+    let auxKanjiList = kanjiList.shift();
+    kanjiList.push(auxKanjiList);
+    console.log(kanjiList);
+    setCharacter(kanjiList[0]["kanji"]);
+    setMeaning(kanjiList[0]["meaning"]);
+  }
+  useEffect(() => {
+    const handleKeyInput = (event) => {
+      switch (event.code) {
+        case "ArrowRight":
+          handleMiss();
+          break;
+        case "ArrowLeft":
+          handleHit();
+          break;
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyInput);
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyInput);
+    };
+  }, [buttonWasClicked]);
+
+  function flipCard() {
+    setCardTurn(!cardTurn);
+  }
+
   const getKanjisFromAPI = async () => {
     try {
       const response = await getKanjiService(user.id);
-      setKanjiList(response.data);      
-      setCharacter(response.data[0]['kanji']);
-      setMeaning(response.data[0]['meaning']);
+      setKanjiList(response.data);
+      setCharacter(response.data[0]["kanji"]);
+      setMeaning(response.data[0]["meaning"]);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const changeKanjiDate = async () => {
+    try{
+      const response = await changeKanjiDateService(kanjiList[0]);
     } catch (error) {
       console.log(error);
     }
@@ -76,8 +110,29 @@ export default function Kanji() {
         />
         <div className="flex flex-row" id="button-div">
           {buttonWasClicked
-            ? buttonArray.map((e) => <div key={uuid()}>{e}</div>)
-            : singleButton}
+            ? [
+                <button
+                  onClick={handleHit}
+                  className="border border-gray-400 border-2 w-fit px-10 py-2 bg-white shadow-md hover:bg-wine-100 hover:text-white transition-colors duration-200 transform rounded-lg"
+                  id={"button-hit"}
+                >
+                  Hit
+                </button>,
+                <button
+                  onClick={handleMiss}
+                  className="border border-gray-400 border-2 w-fit px-10 py-2 bg-white shadow-md hover:bg-wine-100 hover:text-white transition-colors duration-200 transform rounded-lg"
+                  id={"button-miss"}
+                >
+                  Miss
+                </button>,
+              ]
+            : <KanjiFlipButton
+            setButtonWasClicked={setButtonWasClicked}
+            kanjiList={kanjiList}
+            setStory={setStory}
+            buttonWasClicked={buttonWasClicked}
+            setCardTurn={setCardTurn}
+          />}
         </div>
       </div>
     </>
